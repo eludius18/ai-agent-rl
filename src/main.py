@@ -4,6 +4,10 @@ import numpy as np
 from dotenv import load_dotenv
 from telegram_bot import TelegramBot
 from model_training import continue_training, evaluate_model
+from stable_baselines3 import PPO
+from stable_baselines3.common.callbacks import BaseCallback
+from stable_baselines3.common.vec_env import DummyVecEnv
+from trading_env import CryptoTradingEnv
 
 # Load environment variables
 load_dotenv()
@@ -23,20 +27,53 @@ def model_exists():
     """Checks if a pre-trained model exists."""
     return os.path.exists(MODEL_PATH)
 
+class TrainingMetricsCallback(BaseCallback):
+    """
+    Custom callback to track training loss metrics.
+    Extracts policy_loss and value_loss after each training iteration.
+    """
+    def __init__(self):
+        super().__init__()
+        self.policy_loss = []
+        self.value_loss = []
+
+    def _on_step(self) -> bool:
+        logs = self.model.logger.name_to_value
+        if "train/policy_loss" in logs:
+            self.policy_loss.append(logs["train/policy_loss"])
+        if "train/value_loss" in logs:
+            self.value_loss.append(logs["train/value_loss"])
+        return True  # Continue training
+
 def should_retrain(model):
     """
-    Determines whether the model should be retrained based on performance metrics.
-    - Uses a mini-training step to check `policy_loss` and `value_loss`.
-    - Retrains only if learning performance degrades.
+    Determines if the model should be retrained based on training performance.
+    Uses a mini-training session to track `policy_loss` and `value_loss`.
     """
-    train_info = model.learn(total_timesteps=100, log_interval=10)
-    policy_loss = train_info.get("policy_loss", 0)
-    value_loss = train_info.get("value_loss", 0)
+    print("📊 Checking model training metrics...")
 
-    print(f"📉 Policy Loss: {policy_loss:.4f}, Value Loss: {value_loss:.2f}")
+    # Ensure model has an environment set
+    env = DummyVecEnv([lambda: CryptoTradingEnv()])
+    model.set_env(env)
 
-    # Retrain only if the model is struggling to learn effectively
-    return abs(policy_loss) > 0.1 or abs(value_loss) > 1000
+    # Run a small training session to gather loss metrics
+    callback = TrainingMetricsCallback()
+    model.learn(total_timesteps=200, callback=callback)
+
+        # Print ALL logs captured by the model
+    print(f"📜 Logged values: {model.logger.name_to_value}")
+
+    if not callback.policy_loss or not callback.value_loss:
+        print("⚠️ No training loss data available. Skipping retraining.")
+        return False
+
+    avg_policy_loss = np.mean(callback.policy_loss)
+    avg_value_loss = np.mean(callback.value_loss)
+
+    print(f"📉 Avg Policy Loss: {avg_policy_loss:.4f}, Avg Value Loss: {avg_value_loss:.2f}")
+
+    # Retrain if policy loss is too high or value loss exceeds threshold
+    return abs(avg_policy_loss) > 0.1 or abs(avg_value_loss) > 1000
 
 def check_for_opportunity():
     """

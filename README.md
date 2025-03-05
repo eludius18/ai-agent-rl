@@ -5,13 +5,13 @@ AI Agent RL is an **AI-powered cryptocurrency trading bot** utilizing **Reinforc
 
 ## 🚀 Features
 
-👉 **Self-Optimizing AI**: The model continuously improves by evaluating its own learning performance.
-👉 **Automated Trading Alerts**: Uses real-time market data to detect trading opportunities.
-👉 **Smart Retraining**: Retrains **only** when performance metrics indicate degradation.
-👉 **Synthetic Data Fallback**: If live data is unavailable, it generates realistic price patterns.
-👉 **Telegram Integration**: Sends alerts and allows model retraining via Telegram commands.
-👉 **Fully Modular**: Components are separate for easy maintenance and upgrades.
-👉 **Unit Testing**: Automated tests included for stability.
+- 🚀 **Self-Optimizing AI**: The model continuously improves by evaluating its own learning performance.  
+- 🐿 **Automated Trading Alerts**: Uses real-time market data to detect trading opportunities.  
+- 🔄 **Smart Retraining**: Retrains **only** when performance metrics indicate degradation.  
+- 📊 **Synthetic Data Fallback**: If live data is unavailable, it generates realistic price patterns.  
+- 💬 **Telegram Integration**: Sends alerts and allows model retraining via Telegram commands.  
+- 🛠 **Fully Modular**: Components are separate for easy maintenance and upgrades.  
+- ✅ **Unit Testing**: Automated tests included for stability.
 
 ## 📂 Directory Structure
 ```
@@ -23,7 +23,7 @@ AI-Agent-RL/
 │   ├── telegram_bot.py        # Telegram bot for alerts & retraining
 │── tests/
 │   ├── test_trading_env.py    # Unit tests for trading environment
-│   ├── test_model_training.py # Unit tests for model training
+│   └── test_model_training.py # Unit tests for model training
 │── .env                       # Environment variables (not committed)
 │── requirements.txt           # Dependencies
 │── README.md                  # Documentation
