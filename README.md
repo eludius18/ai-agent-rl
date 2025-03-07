@@ -54,6 +54,7 @@ Create a `.env` file in the project root:
 # Telegram API
 TELEGRAM_TOKEN=your_telegram_bot_token
 CHAT_ID=your_telegram_chat_id
+TELEGRAM_ENABLE=0_if_disabled_1_if_enabled
 
 # Crypto API (CoinGecko, Binance, or another provider)
 COINGECKO_API=https://api.coingecko.com/api/v3
@@ -64,6 +65,17 @@ REWARD_THRESHOLD_PERCENT=your_reward_threshold_percent
 TRADE_ALERT_THRESHOLD=your_trade_alert_threshold
 CHECK_INTERVAL=your_check_interval
 MODEL_PATH=your_model_path
+
+# Model Health Thresholds Retraining Config
+
+# Seconds between model health checks
+MODEL_CHECK_IMPROVEMENT_INTERVAL=your_intterval_check
+# Max acceptable policy loss before retraining
+POLICY_LOSS_THRESHOLD=your_policy_thresold
+# Max acceptable value loss before retraining 
+VALUE_LOSS_THRESHOLD=your_value_loss_thresold
+# Minimum entropy loss (to avoid overfitting)
+ENTROPY_LOSS_THRESHOLD=your_entropy_thresold
 ```
 **API Keys:**  
 - **Telegram:** Create a bot using [BotFather](https://t.me/BotFather).  
@@ -89,13 +101,6 @@ PPO (**Proximal Policy Optimization**) is an advanced RL algorithm that helps th
 3. **Evaluate Performance:** Tracks the AI's success over time.
 4. **Retraining (if needed):** If performance degrades, the model retrains itself automatically.
 5. **Send Alerts:** Telegram notifications for potential trade opportunities.
-
-### ⚡ Telegram Commands
-| Command  | Description  |
-|----------|-------------|
-| `/start` | Start the bot |
-| `/check` | Get a trading alert (model evaluation) |
-| `/retrain` | Force retraining the model |
 
 ## 📈 When Does the AI Retrain Itself?
 Unlike basic trading bots, this AI **only retrains when needed**. It evaluates its **own learning efficiency** and **policy loss**:

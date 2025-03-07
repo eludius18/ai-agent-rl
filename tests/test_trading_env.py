@@ -35,5 +35,9 @@ class TestCryptoTradingEnv(unittest.TestCase):
         # Ensure 'done' flag is boolean
         self.assertIsInstance(done, bool, "Done flag should be boolean")
 
+        # Check that the environment's balance and holdings are updating correctly
+        self.assertLessEqual(self.env.balance, 1000, "Balance should decrease after buying")
+        self.assertGreaterEqual(self.env.crypto_held, 0, "Crypto holdings should increase after buying")
+
 if __name__ == '__main__':
     unittest.main()
