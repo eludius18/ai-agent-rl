@@ -1,28 +1,32 @@
 from crewai import Agent
-from crew_integration.llm import get_llm
+from langchain_ollama import OllamaLLM
 
-llm = get_llm()
+def build_agents(llm: OllamaLLM):
+    market_analyst = Agent(
+        role="Market Analyst",
+        goal="Analyze crypto market trends and predict short-term price direction.",
+        backstory="You are a seasoned financial analyst specialized in cryptocurrencies.",
+        verbose=True,
+        allow_delegation=False,
+        llm=llm
+    )
 
-market_analyst = Agent(
-    role="Market Analyst",
-    goal="Analyze market data and identify trading signals.",
-    backstory="Expert in trend detection.",
-    verbose=True,
-    llm=llm
-)
+    rl_decision_agent = Agent(
+        role="RL Decision Maker",
+        goal="Decide whether to execute a trade based on expected reward and policy confidence.",
+        backstory="You are an AI agent trained in reinforcement learning to detect optimal trading points.",
+        verbose=True,
+        allow_delegation=False,
+        llm=llm
+    )
 
-rl_decision_agent = Agent(
-    role="RL Decision Agent",
-    goal="Use the RL output and analysis to decide an action.",
-    backstory="Reinforcement Learning driven decision-maker.",
-    verbose=True,
-    llm=llm
-)
+    risk_manager = Agent(
+        role="Risk Manager",
+        goal="Evaluate risk level of the proposed trade and approve only if within acceptable limits.",
+        backstory="You are an expert in portfolio and risk management for algorithmic trading systems.",
+        verbose=True,
+        allow_delegation=False,
+        llm=llm
+    )
 
-risk_manager = Agent(
-    role="Risk Manager",
-    goal="Validate the proposed action before execution.",
-    backstory="Risk-averse supervisor.",
-    verbose=True,
-    llm=llm
-)
+    return market_analyst, rl_decision_agent, risk_manager

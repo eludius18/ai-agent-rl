@@ -40,7 +40,7 @@ cd ai-agent-rl
 ### 2️⃣ Create a Virtual Environment (Recommended)
 ```sh
 python3 -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate
 ```
 
 ### 3️⃣ Install Dependencies
