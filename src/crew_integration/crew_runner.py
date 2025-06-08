@@ -1,11 +1,21 @@
+import os
+import importlib
+
 from crewai import Crew
 from crew_integration.agents import build_agents
 from crew_integration.tasks import build_tasks
 from langchain_ollama import OllamaLLM
 
 def run_crew_flow(state, action):
-    # Use local model with correct format to avoid LiteLLM errors
-    llm = OllamaLLM(model="ollama/mistral")
+    # Import environment variables for LLM provider and model
+    provider = os.getenv("CREWAI_LLM_PROVIDER")
+    model = os.getenv("CREWAI_LLM_MODEL")
+    class_name = os.getenv("CREWAI_LLM_CLASS", "OllamaLLM")
+
+    # Dynamically import provider and class
+    module = importlib.import_module(provider)
+    llm_class = getattr(module, class_name)
+    llm = llm_class(model=model)
 
     # Create agents
     market_analyst, rl_decision_agent, risk_manager = build_agents(llm)
