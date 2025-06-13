@@ -2,8 +2,7 @@
 
 A self-evolving reinforcement learning (RL) AI Agent trading bot enhanced with CrewAI agents for intelligent decision-making and validation. The bot monitors crypto markets, evaluates trading opportunities using PPO, and verifies decisions using a dynamic team of agents powered by local or cloud-based LLMs. Telegram alerts keep you updated in real-time.
 
----
-
+ 
 ## 🚀 Key Features
 
 - 🤖 **Self-Evolving AI**: Learns and refines trading strategies using PPO reinforcement learning.
@@ -18,8 +17,6 @@ A self-evolving reinforcement learning (RL) AI Agent trading bot enhanced with C
 - 💬 **Telegram Alerts**: Sends smart alerts and retraining notifications to your device.
 - ⚙️ **Fully Modular Design**: Swap out LLMs, trading logic, or comms layer without changing the code.
 - ✅ **Test Coverage**: Unit tests ensure training, evaluation, and environment stability.
-
----
 
 ## 📐 Architecture
 
@@ -57,8 +54,6 @@ A self-evolving reinforcement learning (RL) AI Agent trading bot enhanced with C
                                              +------------------+
 ```
 
----
-
 ## 🧰 Tech Stack
 
 | Layer            | Technology                                                                 |
@@ -74,8 +69,6 @@ A self-evolving reinforcement learning (RL) AI Agent trading bot enhanced with C
 | **Testing**       | `unittest`                                                                |
 | **Runtime**       | Python 3.11 + virtualenv                                                  |
 
----
-
 ## 📦 Installation
 
 ```bash
@@ -85,8 +78,6 @@ python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
-
----
 
 ## ⚙️ Configuration
 
@@ -119,18 +110,14 @@ MODEL_CHECK_IMPROVEMENT_INTERVAL=  # Time in seconds between health checks
 POLICY_LOSS_THRESHOLD=             # Maximum policy loss before triggering retraining
 VALUE_LOSS_THRESHOLD=              # Maximum value loss before triggering retraining
 ENTROPY_LOSS_THRESHOLD=            # Minimum acceptable entropy loss to avoid overfitting
-```
-```env
+
 TELEGRAM_TOKEN=your_token
 CHAT_ID=your_chat_id
 MODEL_PATH=trading_agent.zip
 CREWAI_LLM_PROVIDER=langchain_ollama
 CREWAI_LLM_CLASS=OllamaLLM
 CREWAI_LLM_MODEL=mistral
-...
 ```
-
----
 
 ## 🏁 Usage
 
@@ -146,18 +133,12 @@ The script will:
 - Notify via Telegram if action is approved and defined
 - Retrain if model performance degrades
 
----
-
 ## 🧪 Testing
 
 ```bash
 pytest
 ```
 
----
-
 ## 🧠 Credits
 
 This project integrates state-of-the-art reinforcement learning with AI-driven validation agents to build a smarter, self-adaptive trading bot.
-
----
