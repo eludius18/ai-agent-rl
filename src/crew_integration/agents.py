@@ -1,32 +1,48 @@
+import os
 from crewai import Agent
-from langchain_ollama import OllamaLLM
+from crewai_tools.tools.website_search.website_search_tool import WebsiteSearchTool
+from langchain_core.language_models import BaseLanguageModel
+from typing import Tuple
 
-def build_agents(llm: OllamaLLM):
+def get_web_search_tool():
+    if os.getenv("OPENAI_API_KEY"):
+        return [WebsiteSearchTool()]
+    else:
+        return []
+
+def build_agents(llm: BaseLanguageModel) -> Tuple[Agent, Agent, Agent, Agent]:
+    tools = get_web_search_tool()
+
     market_analyst = Agent(
         role="Market Analyst",
-        goal="Analyze crypto market trends and predict short-term price direction.",
-        backstory="You are a seasoned financial analyst specialized in cryptocurrencies.",
-        verbose=True,
-        allow_delegation=False,
+        goal="Analyze market trends using current news and data",
+        backstory="An expert in financial markets who combines on-chain, off-chain, and live news to assess trends.",
+        tools=tools,
+        llm=llm
+    )
+
+    news_checker = Agent(
+        role="News Checker",
+        goal="Find relevant news or events that might affect cryptocurrency prices",
+        backstory="A fast, precise agent trained to search the web for impactful financial or crypto events.",
+        tools=tools,
         llm=llm
     )
 
     rl_decision_agent = Agent(
-        role="RL Decision Maker",
-        goal="Decide whether to execute a trade based on expected reward and policy confidence.",
-        backstory="You are an AI agent trained in reinforcement learning to detect optimal trading points.",
-        verbose=True,
-        allow_delegation=False,
+        role="RL Trading Agent",
+        goal="Take trading actions based on the reinforcement learning policy",
+        backstory="A decision-making agent that uses signals from the model and other analysts.",
+        tools=[],
         llm=llm
     )
 
     risk_manager = Agent(
         role="Risk Manager",
-        goal="Evaluate risk level of the proposed trade and approve only if within acceptable limits.",
-        backstory="You are an expert in portfolio and risk management for algorithmic trading systems.",
-        verbose=True,
-        allow_delegation=False,
+        goal="Evaluate risk and capital exposure before making any trade",
+        backstory="Protects the system from making high-risk trades that violate constraints.",
+        tools=[],
         llm=llm
     )
 
-    return market_analyst, rl_decision_agent, risk_manager
+    return market_analyst, news_checker, rl_decision_agent, risk_manager

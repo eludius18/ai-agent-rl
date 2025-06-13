@@ -1,0 +1,37 @@
+# Core ML & Data
+numpy
+pandas
+scikit-learn
+joblib
+
+# RL Framework
+stable-baselines3
+gym
+shimmy>=2.0
+torch
+typing_extensions
+
+# CrewAI & LLMs
+crewai==0.130.0
+crewai-tools[websearch]>=0.13.3
+langchain
+langchain-community
+langchain-ollama
+transformers
+accelerate
+litellm
+
+# Telegram Bot & Scheduling
+python-telegram-bot
+python-dotenv
+schedule
+
+# RAG / Web Search
+duckduckgo-search>=4.0.0
+
+# Utils & Visuals
+requests
+matplotlib
+seaborn
+prettytable
+rich

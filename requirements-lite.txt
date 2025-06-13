@@ -1,0 +1,45 @@
+# Núcleo ML / RL
+numpy
+pandas
+scikit-learn
+tensorflow-macos
+torch
+stable-baselines3
+gymnasium
+
+# Blockchain
+web3
+eth-account
+slither-analyzer
+
+# Telegram
+python-telegram-bot
+schedule
+python-dotenv
+
+# CrewAI y LLMs
+crewai
+crewai-tools[websearch]
+langchain
+langchain-community
+langchain-ollama
+transformers
+accelerate
+litellm
+huggingface-hub
+sentencepiece
+duckduckgo-search
+
+# Visualización
+matplotlib
+seaborn
+rich
+
+# Web y API
+flask
+aiohttp
+httpx
+
+# Otros
+requests
+protobuf
