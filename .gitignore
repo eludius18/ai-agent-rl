@@ -35,3 +35,5 @@ checkpoints/
 
 # Ignore trading model files
 trading_agent.zip
+src/mcp/mcp_agent.secrets.yaml
+src/mcp/mcp_agent.secrets.yaml

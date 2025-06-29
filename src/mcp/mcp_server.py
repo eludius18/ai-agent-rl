@@ -12,7 +12,9 @@ from crewai_tools import SerperDevTool, FileWriterTool
 
 load_dotenv()
 
-openai_api_key = os.getenv("OPENAI_API_KEY") or "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"
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable is required")
 
 settings = Settings(
     logger=LoggerSettings(level="info"),
