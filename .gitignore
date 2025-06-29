@@ -26,6 +26,9 @@ Thumbs.db
 *.zip
 *.tar.gz
 
+# Secrets and sensitive information
+mcp_agent.secrets.yaml
+
 # Ignore model checkpoints
 checkpoints/
 *.ckpt
