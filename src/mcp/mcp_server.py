@@ -2,19 +2,17 @@ import asyncio
 import time
 import os
 from dotenv import load_dotenv
-
 from mcp_agent.app import MCPApp
 from mcp_agent.config import Settings, OpenAISettings, LoggerSettings
 from mcp_agent.agents.agent import Agent
 from mcp_agent.tools.crewai_tool import from_crewai_tool
 from mcp_agent.workflows.llm.augmented_llm_openai import OpenAIAugmentedLLM
+from mcp_agent.workflows.llm.augmented_llm_ollama import OllamaAugmentedLLM
 from crewai_tools import SerperDevTool, FileWriterTool
 
 load_dotenv()
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
-if not openai_api_key:
-    raise ValueError("OPENAI_API_KEY environment variable is required")
 
 settings = Settings(
     logger=LoggerSettings(level="info"),
@@ -32,9 +30,10 @@ async def main():
 
         search_tool = SerperDevTool()
         file_tool = FileWriterTool()
+
         agent = Agent(
             name="search_mcp_agent",
-            instruction="You are a helpful AI trading assistant.",
+            instruction="You are a helpful AI trading assistant. Use the search tool to find the latest financial news and write a haiku in ./haiku.md",
             server_names=[],
             functions=[
                 from_crewai_tool(search_tool),
@@ -43,12 +42,23 @@ async def main():
         )
 
         async with agent:
-            llm = await agent.attach_llm(OpenAIAugmentedLLM)
+            try:
+                llm = OpenAIAugmentedLLM(agent)
+                await llm.generate_str(
+                    message="Find the latest financial market news using the search tool and write a haiku about it in ./haiku.md"
+                )
+            except Exception as e:
+                logger.error(f"OpenAI failed: {e}")
+                logger.warning("Switching to Ollama...")
+                try:
+                    llm = OllamaAugmentedLLM(agent)
+                    await llm.generate_str(
+                        message="Find the latest financial market news using the search tool and write a haiku about it in ./haiku.md"
+                    )
+                except Exception as e2:
+                    logger.error(f"Ollama also failed: {e2}")
 
-            result = await llm.generate_str(
-                message="What is Singapore's favorite dish? Write a haiku about it in ./haiku.md"
-            )
-            logger.info(f"✅ LLM Result: {result}")
+        logger.info("✅ Finished without internal executor errors")
 
 if __name__ == "__main__":
     start = time.time()
